@@ -1,17 +1,18 @@
-import type { VcsPlugin, VcsUiApp, PluginConfigEditor } from '@vcmap/ui';
+import type { VcsAction, VcsPlugin, VcsUiApp } from '@vcmap/ui';
 import { name, version, mapVersion } from '../package.json';
+import { createLayerTypesAction, setupToolbox } from './api';
 
 type PluginConfig = Record<never, never>;
 type PluginState = Record<never, never>;
 
-type MyPlugin = VcsPlugin<PluginConfig, PluginState>;
+export type PanoramaPlugin = VcsPlugin<PluginConfig, PluginState> & {
+  readonly layerTypesAction: VcsAction;
+};
 
-export default function plugin(
-  config: PluginConfig,
-  baseUrl: string,
-): MyPlugin {
-  // eslint-disable-next-line no-console
-  console.log(config, baseUrl);
+export default function plugin(): PanoramaPlugin {
+  let destroy: () => void = () => {};
+  let layerTypesAction: VcsAction | undefined;
+
   return {
     get name(): string {
       return name;
@@ -22,57 +23,111 @@ export default function plugin(
     get mapVersion(): string {
       return mapVersion;
     },
-    initialize(vcsUiApp: VcsUiApp, state?: PluginState): Promise<void> {
-      // eslint-disable-next-line no-console
-      console.log(
-        'Called before loading the rest of the current context. Passed in the containing Vcs UI App ',
-        vcsUiApp,
-        state,
-      );
+    get layerTypesAction(): VcsAction {
+      if (!layerTypesAction) {
+        throw new Error('Panorama plugin not initialized');
+      }
+      return layerTypesAction;
+    },
+    initialize(vcsUiApp: VcsUiApp): Promise<void> {
+      const destroyToolbox = setupToolbox(vcsUiApp);
+      const { action, destroy: destroyLayerTypes } =
+        createLayerTypesAction(vcsUiApp);
+      layerTypesAction = action;
+
+      destroy = (): void => {
+        destroyToolbox();
+        destroyLayerTypes();
+      };
+
       return Promise.resolve();
     },
-    onVcsAppMounted(vcsUiApp: VcsUiApp): void {
-      // eslint-disable-next-line no-console
-      console.log(
-        'Called when the root UI component is mounted and managers are ready to accept components',
-        vcsUiApp,
-      );
-    },
-    /**
-     * should return all default values of the configuration
-     */
-    getDefaultOptions(): PluginConfig {
-      return {};
-    },
-    /**
-     * should return the plugin's serialization excluding all default values
-     */
-    toJSON(): PluginConfig {
-      // eslint-disable-next-line no-console
-      console.log('Called when serializing this plugin instance');
-      return {};
-    },
-    /**
-     * should return the plugins state
-     * @param {boolean} forUrl
-     * @returns {PluginState}
-     */
-    getState(forUrl?: boolean): PluginState {
-      // eslint-disable-next-line no-console
-      console.log('Called when collecting state, e.g. for create link', forUrl);
-      return {
-        prop: '*',
-      };
-    },
-    /**
-     * components for configuring the plugin and/ or custom items defined by the plugin
-     */
-    getConfigEditors(): PluginConfigEditor<object>[] {
-      return [];
+    i18n: {
+      en: {
+        panorama: {
+          title: 'Panorama Tool',
+          visibility: 'Visibility',
+          imageEnhancement: {
+            title: 'Image enhancement',
+            brightness: 'Brightness',
+            contrast: 'Contrast',
+            reset: 'Reset',
+            hdr: 'HDR',
+            gamma: 'Gamma',
+            exposure: 'Exposure',
+          },
+          complementaryImages: {
+            title: 'Complementary images',
+            opacity: 'Opacity',
+            intensity: 'Intensity',
+            depth: 'Depth',
+            depthTitle: 'Show depth',
+            intensityTitle: 'Show intensity',
+          },
+          imageMetadata: {
+            title: 'Image metadata',
+            name: 'Name',
+            time: 'Time',
+            position: 'Position',
+            positionTooltip: 'WGS84 Coordinates',
+            orientation: 'Orientation',
+            orientationTooltip: 'Heading, Pitch, Roll in Degrees',
+            cameraOffset: 'Camera offset',
+            tileSize: 'Tile size',
+            hasIntensity: 'Has intensity',
+            hasDepth: 'Has depth',
+            noImage: 'No image available',
+          },
+          notPanoramaMap: 'Not a panorama map',
+          hideCursor: 'Hide cursor',
+          hideFootprint: 'Hide footprints',
+          toggleLayers: 'Toggle additional layers',
+        },
+      },
+      de: {
+        panorama: {
+          title: 'Panoramawerkzeug',
+          visibility: 'Sichtbarkeit',
+          imageEnhancement: {
+            title: 'Bildverbesserung',
+            brightness: 'Helligkeit',
+            contrast: 'Kontrast',
+            reset: 'Zurücksetzen',
+            hdr: 'HDR',
+            gamma: 'Gamma',
+            exposure: 'Belichtung',
+          },
+          complementaryImages: {
+            title: 'Ergänzende Bilder',
+            opacity: 'Deckkraft',
+            intensity: 'Intensität',
+            depth: 'Tiefe',
+            depthTitle: 'Tiefe anzeigen',
+            intensityTitle: 'Intensität anzeigen',
+          },
+          imageMetadata: {
+            title: 'Bildmetadaten',
+            name: 'Name',
+            time: 'Zeit',
+            position: 'Position',
+            positionTooltip: 'WGS84 Koordinaten',
+            orientation: 'Ausrichtung',
+            orientationTooltip: 'Gier-, Nick-, Rollwinkel in Grad',
+            cameraOffset: 'Kameraversatz',
+            tileSize: 'Kachelgröße',
+            hasIntensity: 'Enthält Intensität',
+            hasDepth: 'Enthält Tiefe',
+            noImage: 'Kein Bild verfügbar',
+          },
+          notPanoramaMap: 'Keine Panorama-Karte',
+          hideCursor: 'Cursor ausblenden',
+          hideFootprint: 'Standorte ausblenden',
+          toggleLayers: 'Zusätzliche Ebenen umschalten',
+        },
+      },
     },
     destroy(): void {
-      // eslint-disable-next-line no-console
-      console.log('hook to cleanup');
+      destroy();
     },
   };
 }

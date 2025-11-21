@@ -80,6 +80,15 @@ buildPreview:
   stage: bundle
   script:
     - npm run buildStagingApp
+  before_script:
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_RUNNER_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan gitlab.virtualcitysystems.de >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - git config user.name "Gitlab Runner"
+    - git config user.email "gitlab-runner@vc.systems"
 
 bundle:
   <<: *after_build_definition
@@ -113,7 +122,7 @@ stopEnvironment:
   variables:
     GIT_STRATEGY: none
   image:
-    name: bitnami/kubectl:latest
+    name: gitlab.virtualcitysystems.de:5050/vcsuite/devops/gitlabrunner/kubectl:latest
     entrypoint: ['']
   tags:
     - linux-2.0

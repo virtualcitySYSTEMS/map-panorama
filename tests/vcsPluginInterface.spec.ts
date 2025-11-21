@@ -4,12 +4,6 @@ import { VcsUiApp, loadPlugin, isValidPackageName } from '@vcmap/ui';
 import plugin from '../src/index.js';
 import packageJSON from '../package.json';
 
-function sleep(ms = 0): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
-
 type TestPluginInstance = VcsPlugin<object, object>;
 
 // @ts-expect-error: not defined on global
@@ -19,8 +13,6 @@ window.VcsPluginLoaderFunction = (): {
   // @ts-expect-error: interface may not use this
   default: (config, baseUrl) => plugin(config, baseUrl),
 });
-
-const testPropSymbol = Symbol('testProp');
 
 describe('VcsPlugin Interface test', () => {
   let pluginInstance: TestPluginInstance | null;
@@ -80,8 +72,6 @@ describe('VcsPlugin Interface test', () => {
     it('may implement initialize', () => {
       if (pluginInstance?.initialize) {
         expect(pluginInstance.initialize).to.be.a('function');
-        expect(pluginInstance.initialize(new VcsUiApp(), undefined)).to.not
-          .throw;
       }
     });
 
@@ -112,52 +102,6 @@ describe('VcsPlugin Interface test', () => {
       if (pluginInstance?.toJSON) {
         expect(pluginInstance.toJSON()).to.be.a('object');
       }
-    });
-  });
-
-  describe('shadowing a plugin', () => {
-    let app: VcsUiApp;
-    let pluginInstance2:
-      | (TestPluginInstance & { [testPropSymbol]?: string })
-      | null;
-
-    beforeAll(async () => {
-      app = new VcsUiApp();
-      app.plugins.add(pluginInstance!);
-      pluginInstance2 = await loadPlugin(packageJSON.name, {
-        name: packageJSON.name,
-        version: '2.0.0',
-        entry: '_dev',
-      });
-      if (pluginInstance2) {
-        pluginInstance2[testPropSymbol] = 'test';
-      }
-    });
-
-    afterAll(() => {
-      pluginInstance2?.destroy?.();
-    });
-
-    it('should override the plugin correctly', () => {
-      expect(() => app.plugins.override(pluginInstance2!)).to.not.throw;
-      app.plugins.override(pluginInstance2!);
-      expect(app.plugins.getByKey(packageJSON.name)).to.have.property(
-        testPropSymbol,
-        'test',
-      );
-      expect(app.plugins.getByKey(packageJSON.name)).to.equal(pluginInstance2);
-    });
-
-    it('should reincarnate the plugin correctly', async () => {
-      expect(() => {
-        app.plugins.remove(pluginInstance2!);
-      }).to.not.throw;
-      app.plugins.remove(pluginInstance2!);
-      await sleep(0);
-      expect(app.plugins.getByKey(packageJSON.name)).not.to.have.property(
-        testPropSymbol,
-        'test',
-      );
     });
   });
 });

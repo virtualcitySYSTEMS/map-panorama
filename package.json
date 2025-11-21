@@ -1,6 +1,6 @@
 {
   "name": "@vcmap/panorama",
-  "version": "1.0.0",
+  "version": "1.0.0-rc.0",
   "description": "",
   "type": "module",
   "main": "dist/index.js",
@@ -45,10 +45,17 @@
   ],
   "prettier": "@vcsuite/eslint-config/prettier.js",
   "peerDependencies": {
-    "@vcmap/core": "^6.2.2",
-    "@vcmap/ui": "^6.2.1",
+    "@vcmap-cesium/engine": "^11.0.3",
+    "@vcmap/core": "git+ssh://git@gitlab.virtualcitysystems.de:vcsuite/npm/vcmap/core.git#feature-panoramaGamma",
+    "@vcmap/ui": "^6.3.0-rc.1",
     "vue": "~3.4.38",
     "vuetify": "~3.7.14"
+  },
+  "overrides": {
+    "@vcmap/core": "git+ssh://git@gitlab.virtualcitysystems.de:vcsuite/npm/vcmap/core.git#feature-panoramaGamma",
+    "@vcmap/ui": "^6.3.0-rc.1",
+    "@zip.js/zip.js": "2.7.68",
+    "esbuild": "^0.25.0"
   },
   "devDependencies": {
     "@vcmap/plugin-cli": "^4.1.3",
@@ -61,5 +68,5 @@
     "vitest": "^3.2.4",
     "vue-tsc": "^3.0.7"
   },
-  "mapVersion": "^6.2"
+  "mapVersion": "^6.3"
 }
