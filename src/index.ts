@@ -45,7 +45,7 @@ export default function plugin(): PanoramaPlugin {
     i18n: {
       en: {
         panorama: {
-          title: 'Panorama Tool',
+          title: 'Panorama tool',
           visibility: 'Visibility',
           imageEnhancement: {
             title: 'Image enhancement',
@@ -59,10 +59,10 @@ export default function plugin(): PanoramaPlugin {
           complementaryImages: {
             title: 'Complementary images',
             opacity: 'Opacity',
-            intensity: 'Intensity',
-            depth: 'Depth',
-            depthTitle: 'Show depth',
-            intensityTitle: 'Show intensity',
+            intensity: 'Intensity image',
+            depth: 'Depth image',
+            depthTitle: 'Toggle depth image',
+            intensityTitle: 'Toggle intensity image',
           },
           imageMetadata: {
             title: 'Image metadata',
@@ -79,8 +79,8 @@ export default function plugin(): PanoramaPlugin {
             noImage: 'No image available',
           },
           notPanoramaMap: 'Not a panorama map',
-          hideCursor: 'Hide cursor',
-          hideFootprint: 'Hide footprints',
+          hideCursor: 'Toggle depth cursor',
+          hideFootprint: 'Toggle footprints',
           toggleLayers: 'Toggle additional layers',
         },
       },
@@ -100,10 +100,10 @@ export default function plugin(): PanoramaPlugin {
           complementaryImages: {
             title: 'Ergänzende Bilder',
             opacity: 'Deckkraft',
-            intensity: 'Intensität',
-            depth: 'Tiefe',
-            depthTitle: 'Tiefe anzeigen',
-            intensityTitle: 'Intensität anzeigen',
+            intensity: 'Intensitätsbild',
+            depth: 'Tiefenbild',
+            depthTitle: 'Tiefenbild umschalten',
+            intensityTitle: 'Intensitätsbild umschalten',
           },
           imageMetadata: {
             title: 'Bildmetadaten',
@@ -115,13 +115,13 @@ export default function plugin(): PanoramaPlugin {
             orientationTooltip: 'Gier-, Nick-, Rollwinkel in Grad',
             cameraOffset: 'Kameraversatz',
             tileSize: 'Kachelgröße',
-            hasIntensity: 'Enthält Intensität',
-            hasDepth: 'Enthält Tiefe',
+            hasIntensity: 'Enthält Intensitätsbild',
+            hasDepth: 'Enthält Tiefenbild',
             noImage: 'Kein Bild verfügbar',
           },
           notPanoramaMap: 'Keine Panorama-Karte',
-          hideCursor: 'Cursor ausblenden',
-          hideFootprint: 'Standorte ausblenden',
+          hideCursor: 'Tiefenbild-Cursor umschalten',
+          hideFootprint: 'Standorte umschalten',
           toggleLayers: 'Zusätzliche Ebenen umschalten',
         },
       },

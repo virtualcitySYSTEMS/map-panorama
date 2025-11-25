@@ -37,6 +37,7 @@ export function setupToolbox(app: VcsUiApp): () => void {
       state: {
         headerTitle: 'panorama.title',
         headerIcon: settingsIcon,
+        infoUrlCallback: app.getHelpUrlCallback('tools/panoramaTool.html'),
       },
     },
     app.windowManager,
