@@ -51,6 +51,15 @@
       image.value = newImage;
     },
   );
+
+  const formattedImageTime = computed(() => {
+    if (!image.value?.time) return '';
+    return new Intl.DateTimeFormat(app.vueI18n.locale.value, {
+      dateStyle: 'short',
+      timeStyle: 'short',
+    }).format(image.value.time);
+  });
+
   watch(
     image,
     (newImage) => {
@@ -207,7 +216,7 @@
               <vcs-text-field
                 type="datetime"
                 readonly
-                :model-value="image.time?.toISOString()"
+                :model-value="formattedImageTime"
               />
             </v-col>
           </v-row>
