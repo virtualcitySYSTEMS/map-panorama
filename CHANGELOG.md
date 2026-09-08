@@ -1,3 +1,7 @@
+# v1.0.2
+
+- Added `id` _panorama-toolbox_ to toolbox button, enabling usage of Toolbar callbacks
+
 # v1.0.1
 
 - Added help URL.

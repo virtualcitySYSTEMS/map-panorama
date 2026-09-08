@@ -44,8 +44,9 @@ export function setupToolbox(app: VcsUiApp): () => void {
     name,
   );
 
-  const toolbox = app.toolboxManager.add(
-    { action, type: ToolboxType.SINGLE },
+  const toolboxId = 'panorama-toolbox';
+  app.toolboxManager.add(
+    { action, id: toolboxId, type: ToolboxType.SINGLE },
     name,
   );
 
@@ -57,7 +58,7 @@ export function setupToolbox(app: VcsUiApp): () => void {
 
   return (): void => {
     destroyAction();
-    app.toolboxManager.remove(toolbox.id);
+    app.toolboxManager.remove(toolboxId);
     mapListener();
   };
 }

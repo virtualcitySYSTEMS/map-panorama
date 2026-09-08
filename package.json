@@ -46,14 +46,12 @@
   "prettier": "@vcsuite/eslint-config/prettier.js",
   "peerDependencies": {
     "@vcmap-cesium/engine": "^11.0.3",
-    "@vcmap/core": "^6.3.0-rc.1",
-    "@vcmap/ui": "^6.3.0-rc.1",
+    "@vcmap/core": "^6.3.9",
+    "@vcmap/ui": "^6.3.11",
     "vue": "~3.4.38",
     "vuetify": "~3.7.14"
   },
   "overrides": {
-    "@vcmap/core": "^6.3.0-rc.1",
-    "@vcmap/ui": "^6.3.0-rc.1",
     "@zip.js/zip.js": "2.7.68",
     "esbuild": "^0.25.0"
   },
@@ -65,6 +63,7 @@
     "jsdom": "^27.0.0",
     "resize-observer-polyfill": "^1.5.1",
     "typescript": "^5.9.2",
+    "vite-plugin-vuetify": "~2.0.4",
     "vitest": "^3.2.4",
     "vue-tsc": "^3.0.7"
   },
